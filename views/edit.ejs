@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Post</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="bg-gradient-to-r from-blue-100 to-purple-100 flex items-center min-h-screen py-10">
+
+    <!-- Edit Post Container -->
+    <div class="container mx-auto max-w-lg bg-white rounded-lg shadow-lg p-8">
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+            <i class="fas fa-edit text-purple-600 mr-2"></i> Edit Your Post
+        </h2>
+
+        <form action="/update-post/<%= post.id %>" method="POST" class="space-y-6">
+            <div>
+                <label for="content" class="block text-sm font-medium text-gray-600 mb-1">Post Content</label>
+                <textarea id="content" name="content" required rows="5"
+                    class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500 text-gray-800 resize-none"><%= post.content %></textarea>
+            </div>
+            <button type="submit" 
+                class="w-full py-3 text-white bg-purple-600 rounded-lg font-semibold text-lg hover:bg-purple-700 transition duration-300 focus:outline-none focus:ring-2 focus:ring-purple-500">
+                <i class="fas fa-save mr-2"></i> Save Changes
+            </button>
+        </form>
+
+        <!-- Cancel Button to Go Back -->
+        <div class="mt-4 text-center">
+            <a href="/profile" 
+               class="text-gray-600 hover:text-gray-900 transition duration-300">
+               <i class="fas fa-arrow-left mr-1"></i> Cancel
+            </a>
+        </div>
+    </div>
+</body>
+</html>

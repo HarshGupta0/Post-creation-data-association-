@@ -56,7 +56,7 @@ app.post('/register', async (req, res) => {
 
             let token = jwt.sign({ email: req.body.email, userid: newUser._id }, JWT_SECRET);
             res.cookie("token", token);
-            res.send("Registered");
+            res.redirect("/login");
         });
     });
 });
@@ -120,6 +120,39 @@ app.post('/create-post', isLoggedIn, async(req, res) => {
     await user.save();
     res.redirect("/profile");
 });
+app.get('/like-post/:id', isLoggedIn, async(req, res) => {
+    // Retrieve the post using postModel, not userModel
+    let post = await postModel.findOne({_id: req.params.id});
+
+    // Check if the user has already liked the post
+    if (post.likes.indexOf(req.user.userid) === -1) {
+        // If not liked, add the user's ID to the likes array
+        post.likes.push(req.user.userid);
+    } else {
+        // If already liked, remove the user's ID from the likes array
+        post.likes.splice(post.likes.indexOf(req.user.userid), 1);
+    }
+    await post.save();
+    res.redirect('/profile');
+});
+app.get('/edit-post/:id', isLoggedIn, async (req, res) => {
+    const post = await postModel.findById(req.params.id);
+    if (post) {
+        res.render('edit', { post });
+    } else {
+        res.redirect('/profile');
+    }
+});
+app.post('/update-post/:id', isLoggedIn, async (req, res) => {
+    const { content } = req.body;
+    try {
+        await postModel.findByIdAndUpdate(req.params.id, { content });
+        res.redirect('/profile');
+    } catch (error) {
+        res.redirect('/edit-post/' + req.params.id);
+    }
+});
+
 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
